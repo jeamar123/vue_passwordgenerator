@@ -9,6 +9,7 @@ module.exports = {
         'c-secondary': '#1F6F91',
         'c-black': '#465156',
         'c-gray': '#E5E7EB',
+        'c-red': '#f77b7b',
 
         'c-2C80CF': '#2C80CF',
       },

@@ -15,15 +15,35 @@
           <Toggle v-model="passwordFilters.numbers"/> <span class="font-medium">Include Numbers <span class="text-base ml-5">( 123456 ... )</span></span>
         </div>
         <div class="flex items-center gap-5 mb-5">
-          <Toggle v-model="passwordFilters.symbols"/> <span class="font-medium">Include Symbols <span class="text-base ml-5">( @/+#$% ... )</span></span>
+          <Toggle 
+            v-model="passwordFilters.symbols"
+            @change="(value) => {
+              if(!value){
+                passwordFilters.removeAmbChars = false;
+              }
+            }"
+          /> 
+          <span class="font-medium">Include Symbols <span class="text-base ml-5">( @/+#$% ... )</span></span>
         </div>
         <div class="flex items-center gap-5 mb-12">
-          <Toggle v-model="passwordFilters.removeAmbChars"/> <span class="font-medium">Exclude Ambigous Characters <span class="text-base ml-5">( { } [ ] ( ) / \ ' " ` ... )</span></span>
+          <Toggle 
+            v-model="passwordFilters.removeAmbChars"
+            @change="(value) => {
+              if(value){
+                if(!passwordFilters.symbols){
+                  passwordFilters.symbols = true;
+                }
+              }
+            }"
+          /> 
+          <span class="font-medium">Exclude Ambigous Characters <span class="text-base ml-5">( { } [ ] ( ) / \ ' " ` ... )</span></span>
         </div>
         <div class="flex flex-col gap-7 mb-32 max-w-md">
           <span class="font-medium">Password length</span>
-          <Slider v-model="passwordFilters.length" :tooltips="true" tooltipPosition="bottom" :max="50"/>
+          <Slider v-model="passwordFilters.length" :tooltips="true" tooltipPosition="bottom" :min="6" :max="50"/>
         </div>
+
+       
 
         <div class="w-full relative mb-10">
           <div id="copied-tooltip" class="absolute -top-12 left-0 w-full flex items-center justify-center hidden">
@@ -44,7 +64,7 @@
             <path d="M5 3a2 2 0 00-2 2v6a2 2 0 002 2V5h8a2 2 0 00-2-2H5z" />
           </svg>
         </div>
-
+        <p v-if="filterErr" class="text-center text-c-red text-sm my-5 font-medium">You must select at least one `Include` option</p>
         <div class="flex items-center justify-center">
           <button @click="generatePassword" class="bg-c-secondary py-4 px-9 text-c-primary shadow-c-button text-3xl rounded-lg font-light">Generate</button>
         </div>
@@ -76,6 +96,13 @@
 
   import { ref } from "vue";
 
+  const uppercaseLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const lowercaseLetters = 'abcdefghijklmnopqrstuvwxyz';
+  const numbers = '0123456789';
+  const symbols = '!#$%&*+,-=?@_|';
+  const ambSymbols = '{}[]()^[\\]^`~,;:.<>';
+
+
   let passwordFilters = ref({
     uppercase: false,
     lowercase: false,
@@ -85,6 +112,8 @@
     length: 12
   });
 
+  let includeChars = '';
+  let filterErr = ref(false);
   let generatedPassword = ref("");
 
 
@@ -98,11 +127,41 @@
     }, 2000);
   };
 
-  const generatePassword = () => {
-    console.log(passwordFilters.value);
-    console.log(passwordFilters.value.uppercase);
+  const filterCharacters = () => {
+    if(
+      !passwordFilters.value.uppercase && !passwordFilters.value.lowercase &&
+      !passwordFilters.value.numbers && !passwordFilters.value.symbols &&
+      !passwordFilters.value.removeAmbChars
+    ){
+      return false;
+    }
+    includeChars = '';
+    if(passwordFilters.value.uppercase){ includeChars += uppercaseLetters; }
+    if(passwordFilters.value.lowercase){ includeChars += lowercaseLetters; }
+    if(passwordFilters.value.numbers){ includeChars += numbers; }
+    if(passwordFilters.value.symbols){ 
+      includeChars += symbols; 
 
-    generatedPassword.value = 'adsfasdfasd';
+      if(!passwordFilters.value.removeAmbChars){ includeChars += ambSymbols; }
+    }
+    
+
+    return includeChars;
+  }
+
+  const generatePassword = () => {
+    let chars = filterCharacters();
+    if(!chars){ filterErr.value = true; return false; }
+
+    let password = "";
+
+    for (let i = 0; i < passwordFilters.value.length; i++) {
+      const index = Math.floor(Math.random() * chars.length);
+      password += chars[index];
+    }
+
+    filterErr.value = false;
+    generatedPassword.value = password;
   }
 
 </script>
