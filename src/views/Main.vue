@@ -1,18 +1,18 @@
 <template>
 
-  <div class="w-full h-screen overflow-y-auto c-scrollbar flex flex-col">
-    <div class="flex flex-1">
-      <div class="w-1/2 bg-c-2C80CF py-16 2xl:py-20 px-16 2xl:px-32">
+  <div class="w-full h-screen overflow-y-auto c-scrollbar flex flex-col ">
+    <div class="flex flex-col-reverse md:flex-row flex-1">
+      <div class="flex-1 md:w-1/2 bg-c-2C80CF py-10 lg:py-16 2xl:py-20 px-12 lg:px-16 2xl:px-32">
         <h3 class="text-c-primary font-bold text-2xl mb-10 xl:mb-12">Options</h3>
 
         <div class="flex items-center gap-5 mb-5">
-          <Toggle v-model="passwordFilters.uppercase"/> <span class="font-medium">Include Uppercase <span class="text-base ml-5">( ABCDEFGH ... )</span></span>
+          <Toggle v-model="passwordFilters.uppercase"/> <span class="font-medium">Include Uppercase <span class="text-base">(ABCDEFGH ...)</span></span>
         </div>
         <div class="flex items-center gap-5 mb-5">
-          <Toggle v-model="passwordFilters.lowercase"/> <span class="font-medium">Include Lowercase <span class="text-base ml-5">( abcdefgh ... )</span></span>
+          <Toggle v-model="passwordFilters.lowercase"/> <span class="font-medium">Include Lowercase <span class="text-base">(abcdefgh ...)</span></span>
         </div>
         <div class="flex items-center gap-5 mb-5">
-          <Toggle v-model="passwordFilters.numbers"/> <span class="font-medium">Include Numbers <span class="text-base ml-5">( 123456 ... )</span></span>
+          <Toggle v-model="passwordFilters.numbers"/> <span class="font-medium">Include Numbers <span class="text-base">(123456 ...)</span></span>
         </div>
         <div class="flex items-center gap-5 mb-5">
           <Toggle 
@@ -23,7 +23,7 @@
               }
             }"
           /> 
-          <span class="font-medium">Include Symbols <span class="text-base ml-5">( @/+#$% ... )</span></span>
+          <span class="font-medium">Include Symbols <span class="text-base">(@/+#$% ...)</span></span>
         </div>
         <div class="flex items-center gap-5 mb-12">
           <Toggle 
@@ -36,9 +36,9 @@
               }
             }"
           /> 
-          <span class="font-medium">Exclude Ambigous Characters <span class="text-base ml-5">( { } [ ] ( ) / \ ' " ` ... )</span></span>
+          <span class="font-medium">Exclude Ambigous Characters <span class="text-base">({ } [ ] ( ) / \ ' " ` ...)</span></span>
         </div>
-        <div class="flex flex-col gap-7 mb-32 max-w-md">
+        <div class="flex flex-col gap-7 mb-14 lg:mb-32 max-w-md">
           <span class="font-medium">Password length</span>
           <Slider v-model="passwordFilters.length" :tooltips="true" tooltipPosition="bottom" :min="6" :max="50"/>
         </div>
@@ -69,8 +69,8 @@
           <button @click="generatePassword" class="bg-c-secondary py-4 px-9 text-c-primary shadow-c-button text-3xl rounded-lg font-light">Generate</button>
         </div>
       </div>
-      <div class="w-1/2 py-20 px-20 2xl:px-40">
-        <h1 class="text-6xl font-bold text-c-black text-center px-20 mb-16 lg:mb-24">PASSWORD GENERATOR</h1>
+      <div class="flex-1 md:w-1/2 py-20 px-12 lg:px-20 2xl:px-40">
+        <h1 class="text-5xl lg:text-6xl font-bold text-c-black text-center xl:px-20 mb-16 lg:mb-24">PASSWORD GENERATOR</h1>
 
         <h5 class="font-bold font-helvetica text-c-black mb-10 text-2xl">Tips for a secure and strong password:</h5>
 
